@@ -1,6 +1,8 @@
 package com.existot01.guesswho.controller;
 
-import com.existot01.guesswho.common.R;
+import com.existot01.pojo.Instance;
+import com.existot01.pojo.Root;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -10,8 +12,8 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * 文件上传和下载
@@ -23,6 +25,9 @@ public class CommonController {
 
     @Value("${upload-img.path}")
     private String basePath;
+
+    @Value("${mockdata.path}")
+    private String mockData;
 
     /**
      * 文件上传
@@ -90,5 +95,25 @@ public class CommonController {
             e.printStackTrace();
         }
 
+    }
+
+    @CrossOrigin
+    @GetMapping("/analyse")
+    public Instance analyse (String name) throws IOException {
+        log.info(mockData);
+
+        Instance ans = new Instance();
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        Root root = mapper.readValue(new File(mockData), Root.class);
+
+        for (Instance instance : root.getInstance()) {
+            if (Objects.equals(instance.getImg_url(), name)) {
+                ans = instance;
+            }
+        }
+
+        return ans;
     }
 }

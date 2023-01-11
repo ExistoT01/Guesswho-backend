@@ -5,3 +5,6 @@ spring:
     name: GuessWho
 upload-img:
   path: D:\img\
+mockdata:
+  path: src/main/resources/cases/format.json
+

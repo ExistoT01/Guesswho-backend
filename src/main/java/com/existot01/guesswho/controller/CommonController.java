@@ -3,10 +3,7 @@ package com.existot01.guesswho.controller;
 import com.existot01.guesswho.common.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
@@ -32,8 +29,11 @@ public class CommonController {
      * @param file
      * @return
      */
+    @CrossOrigin
     @PostMapping("/upload")
-    public R<String> upload(MultipartFile file) {
+    public String upload(MultipartFile file) {
+        log.info(file.toString());
+
         // 获取原始文件名
         String originalFilename = file.getOriginalFilename();
 
@@ -53,7 +53,7 @@ public class CommonController {
             throw new RuntimeException(e);
         }
 
-        return R.success(originalFilename);
+        return originalFilename;
     }
 
     /**
@@ -61,6 +61,7 @@ public class CommonController {
      * @param name
      * @param response
      */
+    @CrossOrigin
     @GetMapping("/download")
     public void download(String name, HttpServletResponse response) {
 
